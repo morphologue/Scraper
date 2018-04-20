@@ -1,0 +1,82 @@
+﻿/* Style the form similarly to the panels on InfoTrack's homepage, centering horizontally and (on
+   non-mobiles) vertically. */
+
+* {
+    box-sizing: border-box;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 16px;
+}
+
+body {
+    display: flex;
+}
+
+.toplevel-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin: 20px auto;
+    padding: 40px;
+    background-color: #f0f3f8;
+}
+
+/* Also center .toplevel-container vertically on largish devices (iPad and above). */
+@media only screen and (min-width: 500px) {
+    body, html {
+        height: 100%;
+    }
+
+    .toplevel-container {
+        margin: auto;
+    }
+}
+
+form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    width: 240px;
+}
+
+input {
+    flex: 0 1 40px;
+    outline: none;
+}
+
+input[type='text'] {
+    padding: 5px;
+    margin: 0 10px 14px;
+    border: 1px solid #dedede;
+}
+
+input[type='text']:focus {
+    border-color: #404040;
+}
+
+input[type='submit'] {
+    padding: 5px 10px;
+    border-radius: 24px;
+    background-color: #41a9d5;
+    color: #ffffff;
+    border: none;
+}
+
+input[type='submit']:not([disabled]):hover {
+    background-color: #52b1d9;
+}
+
+input[type='submit'][disabled], input[type='submit']:focus {
+    opacity: 0.5;
+}
+
+p {
+    margin: 29px 10px 0;
+    /* So that the text block doesn't become narrower than the form, which would make it look
+       centered */
+    min-width: 220px;
+    max-width: 500px;
+}
+
+.hidden {
+    display: none;
+}

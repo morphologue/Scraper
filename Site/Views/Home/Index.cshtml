@@ -1,11 +1,28 @@
 ﻿@{
     Layout = null;
+    const string INITIAL_SEARCH_TERMS = "online title search";
 }
 
 <!DOCTYPE html>
 <html>
     <head>
-        @* This icon should feel familiar. *@
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SEO Check</title>
         <link rel="icon" href="~/favicon.png" sizes="32x32">
+        <link rel="stylesheet" href="~/Home/Index.css">
     </head>
+
+    <body>
+        <div class="toplevel-container">
+            <form>
+                <input type="text" placeholder="Enter search terms" value="@INITIAL_SEARCH_TERMS">
+                <input type="submit" value="Check Google rankings">
+            </form>
+            @* JS will show/hide the P, and set text in the STRONG and SPAN. *@
+            <p class="hidden"><strong></strong><span></span></p>
+        </div>
+
+        @* The "no libraries" restriction makes bundling unnecessary. *@
+        <script src="~/Home/Index.js"></script>
+    </body>
 </html>
