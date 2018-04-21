@@ -25,11 +25,10 @@ namespace Site
         {
             services.AddMvc();
 
-            // Hook up our interfaces for DI. These all need to be scoped as HttpDownloader has
-            // request-specific state.
-            services.AddScoped<IDownloader, HttpDownloader>();
-            services.AddScoped<IExtractor, GoogleExtractor>();
-            services.AddScoped<IRanker, ExtractionRanker>();
+            // Hook up our interfaces for DI.
+            services.AddSingleton<IDownloader, HttpDownloader>();
+            services.AddSingleton<IExtractor, GoogleExtractor>();
+            services.AddSingleton<IRanker, ExtractionRanker>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -9,7 +9,7 @@ namespace Scraper.Code.SearchResultUrlExtraction
     // genuine search results are returned: not ads.
     public class GoogleExtractor : IExtractor
     {
-        const string DEFAULT_GOOGLE = "https://google.com.au";
+        const string DEFAULT_GOOGLE = "https://www.google.com.au";
         
         // If this HTML fragment occurs, we've been caught out.
         const string RECAPTCHA_INDICATOR = "<div id=\"recaptcha\" class=\"g-recaptcha\"";
@@ -35,15 +35,16 @@ namespace Scraper.Code.SearchResultUrlExtraction
         public IEnumerable<string> Extract(string search_terms)
         {
             string page = null;
-            string next_page_path = "/search?q=" + HttpUtility.UrlEncode(search_terms);
+            int processed_results = 0;
+            bool has_next_page_link = true;
 
             while (true) {
-                if (next_page_path == null)
+                if (!has_next_page_link)
                     // We're out of "next page" links.
                     yield break;
 
                 try {
-                    page = downloader.Download(googleBaseUrl + next_page_path);
+                    page = downloader.Download(ConstructNextPageUrl(search_terms, processed_results));
                 } catch (DownloadException ex) {
                     if (ex.InnerException is WebException webex
                             && (webex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.ServiceUnavailable)
@@ -52,16 +53,18 @@ namespace Scraper.Code.SearchResultUrlExtraction
                     throw new ExtractionException(ex.Message, ex);
                 }
 
-                next_page_path = FindHref(page, NEXT_PAGE_INDICATOR, 0, out int _);
-                if (next_page_path == null && page.Contains(RECAPTCHA_INDICATOR))
+                has_next_page_link = FindHref(page, NEXT_PAGE_INDICATOR, 0, out int _) != null;
+                if (!has_next_page_link && page.Contains(RECAPTCHA_INDICATOR))
                     throw new ExtractionException("Google has sent a reCAPTCHA challenge. This can happen when too many searches have"
                         + " been performed within a short time. Please try again later.");
 
                 // Comb through the search results.
                 for (int start_idx = 0; start_idx >= 0;) {
                     string to_yield = FindHref(page, SEARCH_RESULT_INDICATOR, start_idx, out start_idx);
-                    if (to_yield != null)
+                    if (to_yield != null) {
+                        processed_results++;
                         yield return to_yield;
+                    }
                 }
             }
         }
@@ -85,7 +88,11 @@ namespace Scraper.Code.SearchResultUrlExtraction
             if (terminator_idx == found_idx)
                 throw new ExtractionException("Missing HREF. There might be a problem with Google.");
 
-            return page.Substring(found_idx, terminator_idx - found_idx);
+            return HttpUtility.HtmlDecode(page.Substring(found_idx, terminator_idx - found_idx));
         }
+
+        // The "next" links on each page don't work properly without cookies so this method does the
+        // pagination manually.
+        string ConstructNextPageUrl(string search_terms, int skip) => $"{googleBaseUrl}/search?q={HttpUtility.UrlEncode(search_terms)}&start={skip}";
     }
 }

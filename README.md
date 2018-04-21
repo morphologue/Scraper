@@ -30,5 +30,3 @@ sudo docker build -t scraper .
 ## Notes
 * Only the first 100 search results are scrutinised.
 * The rankings reflect genuine search results: ads are not included.
-* The server code downloads multiple pages from Google rather than requesting 100 results up front, as this helps to prevent Google from blocking the app.
-* For the same reason there is a random delay in between Google page loads.

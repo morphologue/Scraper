@@ -24,7 +24,7 @@ namespace Tests
             Mock<IDownloader> mock_downloader = new Mock<IDownloader>();
             mock_downloader.Setup(d => d.Download(It.IsAny<string>()))
                 .Returns<string>(u => {
-                    bool first_page = u.EndsWith("World");
+                    bool first_page = u.EndsWith("start=0");
                     string search_results = "<h3 class=\"r\"><a href=\"http://link1.com/\"></a></h3><h3 class=\"r\"><a href=\"http://www.infotrack.com.au/\"></a></h3>";
                     return search_results + (first_page ? "<a class=\"pn\" href=\"/page2\"></a>" : "");
                 });
