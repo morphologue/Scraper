@@ -41,10 +41,12 @@
     form.addEventListener('submit', function(evt) {
         evt.preventDefault();
 
+        // Make sure the "submit" won't look pressed any more once it's enabled.
+        inputs[1].blur();
+
         var query = inputs[0].value;
         if (!query) {
             alert('Please enter search terms.');
-            inputs[1].blur();
             return;
         }
 
@@ -57,7 +59,7 @@
         showResult();
         
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'CheckRankings');
+        xhr.open('POST', form.action);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
             stopChecking();
