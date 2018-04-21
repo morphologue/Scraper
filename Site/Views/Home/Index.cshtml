@@ -1,4 +1,5 @@
-﻿@using Site.Controllers;
+﻿@using Site;
+@using Site.Controllers;
 @{
     Layout = null;
     const string INITIAL_SEARCH_TERMS = "online title search";
@@ -9,8 +10,8 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>SEO Check</title>
-        <link rel="icon" href="~/favicon.png" sizes="32x32">
-        <link rel="stylesheet" href="~/Home/Index.css">
+        <link rel="icon" href="@(Startup.StaticFilesRequestPath)/favicon.png" sizes="32x32">
+        <link rel="stylesheet" href="@(Startup.StaticFilesRequestPath)/Home/Index.css">
     </head>
 
     <body>
@@ -24,6 +25,6 @@
         </div>
 
         @* The "no libraries" restriction makes bundling unnecessary. *@
-        <script src="~/Home/Index.js"></script>
+        <script src="@(Startup.StaticFilesRequestPath)/Home/Index.js"></script>
     </body>
 </html>

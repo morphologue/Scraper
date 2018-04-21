@@ -14,6 +14,9 @@ namespace Site
 {
     public class Startup
     {
+        // The prefix which Razor views will need to prepend before paths to static files.
+        public static string StaticFilesRequestPath { get; private set; }
+
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration) => Configuration = configuration;
@@ -34,9 +37,12 @@ namespace Site
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseStaticFiles();
+            string url_prefix = Configuration["UrlPrefix"];
+            string no_trailing_slash = url_prefix.EndsWith("/") ? url_prefix.Substring(0, url_prefix.Length - 1) : url_prefix;
+            StaticFilesRequestPath = "/" + no_trailing_slash;
+            app.UseStaticFiles(StaticFilesRequestPath);
 
-            app.UseMvc(routes => routes.MapRoute("default",  Configuration["UrlPrefix"] + "{controller=Home}/{action=Index}"));
+            app.UseMvc(routes => routes.MapRoute("default",  url_prefix + "{controller=Home}/{action=Index}"));
         }
     }
 }
