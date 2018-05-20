@@ -2,8 +2,6 @@
 This web app allows the user to enter a search query, which defaults to "online title search", then
 see the rankings for infotrack.com.au as scraped from google.com.au.
 
-An instance of this app is hosted at https://gavin-tech.com/scraper.
-
 ## Tests
 From the top level of the checkout:
 ```
